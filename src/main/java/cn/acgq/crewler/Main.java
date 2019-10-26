@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Main {
-    final static String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
-    final static Pattern pattern = Pattern.compile("http[s]?://(\\w{1,10}\\.)?sina\\.cn.*");
+    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
+    private static final Pattern pattern = Pattern.compile("http[s]?://(\\w{1,10}\\.)?sina\\.cn.*");
 
     public static void main(String[] args) throws IOException {
 
