@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -25,7 +27,6 @@ import java.util.stream.Collectors;
 public class Main {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
     private static final Pattern pattern = Pattern.compile("http[s]?://(\\w{1,10}\\.)?sina\\.cn.*");
-
 
     public static void main(String[] args) throws IOException, SQLException {
         CrewlerDao dao = new JDBCCrewlerDao();
@@ -116,6 +117,7 @@ public class Main {
      */
     private static boolean isArticle(List<Element> articles) {
         return articles.size() == 0 ? false : true;
+
     }
 
     /**
@@ -138,6 +140,7 @@ public class Main {
     private static List<String> getLinksFromPage(String url) {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         List<String> linkPool;
+
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("User-Agent", USER_AGENT);
         try (CloseableHttpResponse response1 = httpclient.execute(httpGet)) {
