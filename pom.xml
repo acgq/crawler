@@ -55,6 +55,26 @@
             <artifactId>h2</artifactId>
             <version>1.4.199</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.44</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.8.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -96,17 +116,11 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>6.0.7</version>
                 <configuration>
-                    <url>jdbc:h2:file:D:\Code\crawler\test</url>
+<!--                    <url>jdbc:h2:file:D:\Code\crawler\test</url>-->
+                    <url>jdbc:mysql://localhost:33060/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;?useSSL=false</url>
                     <user>root</user>
-                    <password>root</password>
+                    <password>123456</password>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>1.4.199</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

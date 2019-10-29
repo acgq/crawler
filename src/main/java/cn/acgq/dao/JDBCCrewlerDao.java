@@ -1,7 +1,6 @@
-package cn.acgq.crewler;
+package cn.acgq.dao;
 
 import java.sql.*;
-import java.util.List;
 import java.util.Map;
 
 public class JDBCCrewlerDao implements CrewlerDao {
@@ -32,12 +31,12 @@ public class JDBCCrewlerDao implements CrewlerDao {
     }
 
     @Override
-    public boolean updateProcessedLinkDatabase(String link) {
+    public void insertLinkToProcessedLinks(String link) {
         //添加已爬取链接
 
         try (PreparedStatement preparedStatement = connection.prepareStatement("insert into LINKS_PROCESSED (LINK) values (?)")) {
             preparedStatement.setString(1, link);
-            return preparedStatement.execute();
+            preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
 
@@ -45,19 +44,19 @@ public class JDBCCrewlerDao implements CrewlerDao {
     }
 
     @Override
-    public int updateNewsDatabase(Map<String, String> articleMap) {
+    public void insertNewsToDatabase(Map<String, String> articleMap) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("insert into NEWS (TITLE,SRC,BODY) values (?,?,?)")) {
             preparedStatement.setString(1, articleMap.get("title"));
             preparedStatement.setString(2, articleMap.get("src"));
             preparedStatement.setString(3, articleMap.get("body"));
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public String getNextLink() {
+    public String getFromLinkToBeProcessed() {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select LINK from LINKS_TO_BE_PROCESSED limit 1")) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -70,24 +69,18 @@ public class JDBCCrewlerDao implements CrewlerDao {
     }
 
     @Override
-    public int deleteLink(String link) {
+    public void deleteFromLinkToBeProcessed(String link) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("delete from LINKS_TO_BE_PROCESSED where LINK=?")) {
             preparedStatement.setString(1, link);
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
-    public void storeLinksToDataBase(List<String> links) {
-        for (String link : links) {
-            this.insertLinkToDatabase(link);
-        }
-    }
 
     @Override
-    public void insertLinkToDatabase(String link) {
+    public void insertLinksToProcess(String link) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("insert into LINKS_TO_BE_PROCESSED (LINK) values ( ? )")) {
             preparedStatement.setString(1, link);
             preparedStatement.executeUpdate();
