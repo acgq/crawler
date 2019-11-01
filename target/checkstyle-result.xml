@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.22">
-<file name="D:\Code\crawler\src\main\java\cn\acgq\crewler\SinaCrewler.java">
+<file name="D:\Code\crawler\src\main\java\cn\acgq\dao\CrawlerDao.java">
+<error line="6" column="8" severity="error" message="Unused import - java.util.Map." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="D:\Code\crawler\src\main\java\cn\acgq\dao\JDBCCrawlerDao.java">
+<error line="6" column="8" severity="error" message="Unused import - java.util.Map." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="D:\Code\crawler\src\main\java\cn\acgq\dao\MybatisCrawlerDao.java">
+<error line="12" column="8" severity="error" message="Unused import - java.util.Map." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="D:\Code\crawler\src\main\java\cn\acgq\elasticSearch\ElasticsearchDataGenerator.java">
+</file>
+<file name="D:\Code\crawler\src\main\java\cn\acgq\elasticSearch\ElasticsearchEngine.java">
 </file>
 </checkstyle>

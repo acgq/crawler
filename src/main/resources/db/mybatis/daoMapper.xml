@@ -28,8 +28,8 @@
             (LINK)
         values (#{link})
     </insert>
-    <insert id="insertNewsIntoDataBase" parameterType="HashMap">
+    <insert id="insertNewsIntoDataBase" parameterType="cn.acgq.model.News">
         insert into NEWS (TITLE, SRC, BODY, CREATE_DATE, MODIFY_DATE)
-        values (#{title}, #{src}, #{body}, #{createDate}, #{modifyDate})
+        values (#{title}, #{src}, #{body}, now(), now())
     </insert>
 </mapper>

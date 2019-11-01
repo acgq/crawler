@@ -1,5 +1,6 @@
 package cn.acgq;
 
+import cn.acgq.model.News;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class MyBatisTest {
 
@@ -26,9 +28,8 @@ public class MyBatisTest {
     @Test
     public void testSelect() {
         try (SqlSession sqlSession = sessionFactory.openSession()) {
-            int count = sqlSession.selectOne("cn.acgq.dao.NewsMapper.selectLinkFromProcessedLink", "sina.cn");
+            final List<News> objects = sqlSession.selectList("cn.acgq.dao.News.selectNews");
 //            String linkFromProcessedLink = sqlSession.selectOne("cn.acgq.dao.NewsMapper.selectNextLinkToProcess");
-            System.out.println(count);
         }
     }
 }

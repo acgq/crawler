@@ -1,6 +1,7 @@
 package cn.acgq.crewler;
 
-import cn.acgq.dao.CrewlerDao;
+import cn.acgq.dao.CrawlerDao;
+import cn.acgq.model.News;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,17 +15,16 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class SinaCrewler extends Thread {
+public class SinaCrawler extends Thread {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
-//    private static final Pattern pattern = Pattern.compile("http[s]?://news\\.sina\\.cn.*");
+    //    private static final Pattern pattern = Pattern.compile("http[s]?://news\\.sina\\.cn.*");
     private static int count = 1;
 
-    private CrewlerDao dao;
+    private CrawlerDao dao;
 
-    public SinaCrewler(CrewlerDao dao) {
+    public SinaCrawler(CrawlerDao dao) {
         this.dao = dao;
     }
 
@@ -72,17 +72,26 @@ public class SinaCrewler extends Thread {
         return false;
     }
 
-    private void storeLinksToProcess(CrewlerDao dao, Document doc) throws IOException {
+    private void storeLinksToProcess(CrawlerDao dao, Document doc) throws IOException {
         List<Element> aTag = doc.getElementsByTag("a");
 //            过滤掉js,空链接,sina.cn以外的链接
         List<String> linkPool = aTag.stream().map(element -> element.attr("href"))
                 .filter(s -> !s.toLowerCase().startsWith("javascript"))
 //                .filter(s -> !s.equals(""))
+                .map(s -> {
+                    if (s.startsWith("//")) {
+                        s.replace("//", "https://");
+                    }
+                    return s;
+                })
                 .filter(s -> s.contains("sina.cn"))
-                //删除请求的参数
-                .map(s -> s.split("\\?")[0])
+                .filter(s -> s.length() < 1000)
+                .map(s -> s.replace("\\/", "/"))
+                //删除请求参数
+//                .map(s -> s.split("\\?")[0])
                 .collect(Collectors.toList());
         for (String link : linkPool) {
+//            System.out.println(link);
             dao.insertLinksToProcess(link);
         }
     }
@@ -92,13 +101,18 @@ public class SinaCrewler extends Thread {
      *
      * @param link
      * @return
-     * @throws IOException
      */
-    private HttpEntity getEntityFromLink(String link) throws IOException {
+    private HttpEntity getEntityFromLink(String link) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet linkHttpGet = new HttpGet(link);
-        linkHttpGet.setHeader("User-Agent", USER_AGENT);
-        CloseableHttpResponse response = httpClient.execute(linkHttpGet);
+        CloseableHttpResponse response = null;
+        try {
+            HttpGet linkHttpGet = new HttpGet(link);
+            linkHttpGet.setHeader("User-Agent", USER_AGENT);
+            response = httpClient.execute(linkHttpGet);
+        } catch (Exception e) {
+            System.out.println("链接无法访问:" + link);
+            return null;
+        }
         return response.getEntity();
     }
 
@@ -108,7 +122,7 @@ public class SinaCrewler extends Thread {
      * @param dao
      * @return
      */
-    private synchronized String getNextLinkToProcess(CrewlerDao dao) {
+    private synchronized String getNextLinkToProcess(CrawlerDao dao) {
         String link = dao.getFromLinkToBeProcessed();
         dao.deleteFromLinkToBeProcessed(link);
         return link;
@@ -121,20 +135,18 @@ public class SinaCrewler extends Thread {
      * @param articles
      * @return
      */
-    private Map<String, String> extractNewsFromArticle(String link, ArrayList<Element> articles) {
+    private News extractNewsFromArticle(String link, ArrayList<Element> articles) {
         Element article = articles.get(0);
         String title = article.select("h1").text();
         String body = article.select("p").stream()
                 .map(element -> element.text())
                 .collect(Collectors.joining("\n"));
         System.out.println(title);
-        Map<String, String> articleMap = new HashMap<>();
-        articleMap.put("title", title);
-        articleMap.put("src", link);
-        articleMap.put("body", body);
-        articleMap.put("createDate", new Date().toString());
-        articleMap.put("modifyDate", new Date().toString());
-        return articleMap;
+        News news=new News();
+        news.setTitle(title);
+        news.setBody(body);
+        news.setSrc(link);
+        return news;
     }
 
     /**
@@ -144,11 +156,11 @@ public class SinaCrewler extends Thread {
      * @param doc
      * @param link
      */
-    private void storeNewsToDatabase(CrewlerDao dao, Document doc, String link) {
+    private void storeNewsToDatabase(CrawlerDao dao, Document doc, String link) {
         ArrayList<Element> articles = doc.select("article");
         if (isArticle(articles)) {
-            Map<String, String> articleMap = extractNewsFromArticle(link, articles);
-            dao.insertNewsToDatabase(articleMap);
+            News news = extractNewsFromArticle(link, articles);
+            dao.insertNewsToDatabase(news);
         } else {
             //不处理
         }
@@ -171,6 +183,6 @@ public class SinaCrewler extends Thread {
      * @return
      */
     private boolean isInterestedSite(String link) {
-        return link.contains("news.sina.cn");
+        return link.contains("sina.cn") && link.contains("news");
     }
 }

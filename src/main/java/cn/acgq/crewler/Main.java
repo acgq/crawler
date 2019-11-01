@@ -1,14 +1,14 @@
 package cn.acgq.crewler;
 
-import cn.acgq.dao.CrewlerDao;
-import cn.acgq.dao.MybatisCrewlerDao;
+import cn.acgq.dao.CrawlerDao;
+import cn.acgq.dao.MybatisCrawlerDao;
 
 public class Main {
     public static void main(String[] args) {
         final long start = System.currentTimeMillis();
-        CrewlerDao dao = new MybatisCrewlerDao();
+        CrawlerDao dao = new MybatisCrawlerDao();
         for (int i = 0; i < 10; i++) {
-            new SinaCrewler(dao).run();
+            new SinaCrawler(dao).run();
         }
 
     }

@@ -1,11 +1,12 @@
+SET SQL_MODE='ALLOW_INVALID_DATES';
 create table NEWS
 (
     ID                  bigint  primary key auto_increment,
     TITLE               VARCHAR(100) ,
     SRC                 VARCHAR(1000),
     BODY                text,
-    CREATE_DATE         VARCHAR(45),
-    MODIFY_DATE         VARCHAR(45)
+    CREATE_DATE timestamp,
+    MODIFY_DATE timestamp
 )default charset=utf8mb4;
 
 create table LINKS_PROCESSED(
