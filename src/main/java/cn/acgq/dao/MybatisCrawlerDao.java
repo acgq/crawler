@@ -9,7 +9,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.Map;
 
 public class MybatisCrawlerDao implements CrawlerDao {
 

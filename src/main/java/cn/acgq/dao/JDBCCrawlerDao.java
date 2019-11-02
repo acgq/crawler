@@ -3,7 +3,6 @@ package cn.acgq.dao;
 import cn.acgq.model.News;
 
 import java.sql.*;
-import java.util.Map;
 
 public class JDBCCrawlerDao implements CrawlerDao {
     //create database connection
