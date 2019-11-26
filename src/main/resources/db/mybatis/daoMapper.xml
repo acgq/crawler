@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.acgq.dao.NewsMapper">
+    <select id="selectLinkFromProcessedLink" resultType="int" parameterType="String">
+        select count(LINK)
+        from LINKS_PROCESSED
+        where LINK = #{link}
+    </select>
+    <select id="selectNextLinkToProcess" resultType="String">
+        select LINK
+        from LINKS_TO_BE_PROCESSED
+        limit 1
+    </select>
+    <delete id="deleteLinkProcessed" parameterType="String">
+        delete
+        from LINKS_TO_BE_PROCESSED
+        where LINK = #{link}
+    </delete>
+    <insert id="insertLinkToBeProcessed" parameterType="String">
+        insert into LINKS_TO_BE_PROCESSED
+            (LINK)
+        values (#{link})
+    </insert>
+    <insert id="insertLinkProcessed" parameterType="String">
+        insert into LINKS_PROCESSED
+            (LINK)
+        values (#{link})
+    </insert>
+    <insert id="insertNewsIntoDataBase" parameterType="cn.acgq.model.News">
+        insert into NEWS (TITLE, SRC, BODY, CREATE_DATE, MODIFY_DATE)
+        values (#{title}, #{src}, #{body}, now(), now())
+    </insert>
+</mapper>

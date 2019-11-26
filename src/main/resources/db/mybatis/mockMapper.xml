@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.acgq.dao.News">
+
+    <select id="selectNews" resultType="cn.acgq.model.News">
+        select title,body,src,create_date,modify_date
+        from NEWS_COPY
+    </select>
+    <select id="selectNewsFromOrigin" resultType="cn.acgq.model.News">
+        select title,body,src,create_date,modify_date
+        from NEWS
+    </select>
+    <select id="count" resultType="int">
+        select count(*)
+        from NEWS_COPY
+    </select>
+    <insert id="insertNews" parameterType="cn.acgq.model.News">
+        insert into NEWS_COPY
+            (title, src, body, create_date, modify_date)
+        values (#{title}, #{src}, #{body}, #{createDate}, #{modifyDate})
+    </insert>
+</mapper>
