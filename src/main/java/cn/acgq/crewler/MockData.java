@@ -34,7 +34,7 @@ public class MockData {
                 while (count-- > 0) {
                     News one = news.get(random.nextInt(size));
                     Instant modifyDate = one.getModifyDate();
-                    modifyDate.minusSeconds(random.nextInt(1000)*3600);
+                    modifyDate.minusSeconds(random.nextInt(10000)*3600*24);
                     one.setModifyDate(modifyDate);
                     sqlSession.insert("cn.acgq.dao.News.insertNews", one);
                     System.out.println("left:" + count);

@@ -106,7 +106,7 @@
                 <version>6.0.7</version>
                 <configuration>
 <!--                    <url>jdbc:h2:file:D:\Code\crawler\test</url>-->
-                    <url>jdbc:mysql://localhost:33060/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;?useSSL=false</url>
+                    <url>jdbc:mysql://localhost:33060/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false</url>
                     <user>root</user>
                     <password>123456</password>
                 </configuration>

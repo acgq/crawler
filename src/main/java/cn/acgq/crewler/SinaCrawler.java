@@ -142,7 +142,7 @@ public class SinaCrawler extends Thread {
                 .map(element -> element.text())
                 .collect(Collectors.joining("\n"));
         System.out.println(title);
-        News news=new News();
+        News news = new News();
         news.setTitle(title);
         news.setBody(body);
         news.setSrc(link);

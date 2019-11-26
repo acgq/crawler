@@ -36,7 +36,7 @@ public class ElasticsearchEngine {
     private static void search(String keyword) {
         try (RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("localhost", 9200, "http")));) {
+                        new HttpHost("localhost", 9200, "http")))) {
 
             SearchRequest searchRequest = new SearchRequest("news");
 

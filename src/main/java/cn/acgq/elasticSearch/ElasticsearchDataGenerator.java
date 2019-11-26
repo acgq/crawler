@@ -43,9 +43,9 @@ public class ElasticsearchDataGenerator {
     private static void writeSingleThread(List<News> newsFromDatabase) {
         try (RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("localhost", 9200, "http")));) {
+                        new HttpHost("localhost", 9200, "http")))) {
             //单线程写入10倍数据库中数据
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 BulkRequest bulkRequest = new BulkRequest();
                 for (News news : newsFromDatabase) {
                     Map<String, Object> map = new HashMap<>();
@@ -60,7 +60,7 @@ public class ElasticsearchDataGenerator {
                     bulkRequest.add(request);
                 }
                 BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
-                System.out.println(Thread.currentThread().getName() + "写入状态" + bulkResponse.status().getStatus());
+                System.out.println(Thread.currentThread().getName() + "第"+i+"写入状态" + bulkResponse.status().getStatus());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
