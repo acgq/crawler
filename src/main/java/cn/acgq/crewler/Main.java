@@ -1,5 +1,6 @@
 package cn.acgq.crewler;
 
+
 import cn.acgq.dao.CrawlerDao;
 import cn.acgq.dao.MybatisCrawlerDao;
 
@@ -8,6 +9,5 @@ public class Main {
         CrawlerDao dao = new MybatisCrawlerDao();
         for (int i = 0; i < 10; i++) {
             new SinaCrawler(dao).run();
-        }
-    }
+
 }

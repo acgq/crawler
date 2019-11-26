@@ -1,3 +1,4 @@
+
 create table if not exists NEWS
 (
     ID                  bigint  primary key auto_increment,
