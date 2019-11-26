@@ -8,4 +8,5 @@
 ## 使用
 - git clone
 - 连接你的数据库，在resources/db/mybatis-config.xml中设置你的连接
+- 终端运行 mvn flyway:migrate
 - 运行Main
