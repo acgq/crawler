@@ -14,20 +14,21 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SinaCrawler extends Thread {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
     //    private static final Pattern pattern = Pattern.compile("http[s]?://news\\.sina\\.cn.*");
     private static int count = 1;
-
+    
     private CrawlerDao dao;
-
+    
     public SinaCrawler(CrawlerDao dao) {
         this.dao = dao;
     }
-
+    
     @Override
     public void run() {
         //get next link to be processed
@@ -60,7 +61,7 @@ public class SinaCrawler extends Thread {
             throw new RuntimeException(e);
         }
     }
-
+    
     private boolean isFirstVisit(String link) {
         if ("https://sina.cn".equals(link)) {
             if (count > 0) {
@@ -71,7 +72,7 @@ public class SinaCrawler extends Thread {
         }
         return false;
     }
-
+    
     private void storeLinksToProcess(CrawlerDao dao, Document doc) throws IOException {
         List<Element> aTag = doc.getElementsByTag("a");
 //            过滤掉js,空链接,sina.cn以外的链接
@@ -95,7 +96,7 @@ public class SinaCrawler extends Thread {
             dao.insertLinksToProcess(link);
         }
     }
-
+    
     /**
      * 访问链接,返回网页内容
      *
@@ -115,19 +116,23 @@ public class SinaCrawler extends Thread {
         }
         return response.getEntity();
     }
-
+    
     /**
      * 获取下一个爬取链接
      *
      * @param dao
      * @return
      */
-    private synchronized String getNextLinkToProcess(CrawlerDao dao) {
-        String link = dao.getFromLinkToBeProcessed();
-        dao.deleteFromLinkToBeProcessed(link);
+    
+    private String getNextLinkToProcess(CrawlerDao dao) {
+        String link;
+        synchronized (this.getClass()) {
+            link = dao.getFromLinkToBeProcessed();
+            dao.deleteFromLinkToBeProcessed(link);
+        }
         return link;
     }
-
+    
     /**
      * 从文章网页提取内容
      *
@@ -148,7 +153,7 @@ public class SinaCrawler extends Thread {
         news.setSrc(link);
         return news;
     }
-
+    
     /**
      * 将新闻存储到数据库中
      *
@@ -165,7 +170,7 @@ public class SinaCrawler extends Thread {
             //不处理
         }
     }
-
+    
     /**
      * 判断是不是文章
      *
@@ -175,7 +180,7 @@ public class SinaCrawler extends Thread {
     private boolean isArticle(List<Element> articles) {
         return articles.size() == 0 ? false : true;
     }
-
+    
     /**
      * 是否是需要爬取页面
      *
@@ -183,6 +188,6 @@ public class SinaCrawler extends Thread {
      * @return
      */
     private boolean isInterestedSite(String link) {
-        return link.contains("sina.cn") && link.contains("news");
+        return link.contains("news.sina.cn");
     }
 }
