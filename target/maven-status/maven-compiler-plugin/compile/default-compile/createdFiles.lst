@@ -1,7 +1,0 @@
-cn\acgq\crewler\SinaCrawler.class
-cn\acgq\dao\MybatisCrawlerDao.class
-cn\acgq\crewler\Main.class
-cn\acgq\dao\JDBCCrawlerDao.class
-cn\acgq\dao\CrawlerDao.class
-cn\acgq\elasticSearch\ElasticsearchDataGenerator.class
-cn\acgq\elasticSearch\ElasticsearchEngine.class

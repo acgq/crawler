@@ -7,7 +7,9 @@ import cn.acgq.dao.MybatisCrawlerDao;
 public class Main {
     public static void main(String[] args) {
         CrawlerDao dao = new MybatisCrawlerDao();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 6; i++) {
             new SinaCrawler(dao).run();
-
+            
+        }
+    }
 }
